@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        body {
+            font-family: sans-serif;
+            background-color: #4CAF50; /* Green button */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 97vh;
+        }
+        
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px; /* Adjust as needed */
+            position: relative; /* To position the notification */
+        }
+
+        .notification {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none; /* Initially hidden */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            text-align: center;
+        }
+
+        .notification.visible {
+            display: block;
+            background-color: #10d113;
+            color: #fdf6f6;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        textarea {
+            resize: vertical;
+        }
+        
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 12px;
+            display: none; /* Initially hidden */
+        }
+        
+        .success-message {
+            color: green;
+            font-size: 14px;
+            display: none; /* Initially hidden */   
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        button[type="submit"] {
+            background-color: #066309; /* Green button */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049; /* Slightly darker green on hover */
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 90%;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="notification" id="notification">
+            <strong>Message Sent!</strong> Thanks for completing the form. We'll be in touch soon!
+        </div>
+        <h2>Contact Us</h2>
+        <form id="contact-form">
+            <div class="form-group">
+                <label for="firstName">First Name*</label>
+                <input type="text" id="firstName" name="firstName">
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" >
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" >
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="queryType">Query Type *</label>
+                <div class="radio-group">
+                    <input type="radio" id="generalEnquiry" name="queryType" value="General Enquiry" >
+                    <label for="generalEnquiry">General Enquiry</label>
+                    <input type="radio" id="supportRequest" name="queryType" value="Support Request" >
+                    <label for="supportRequest">Support Request</label>
+                </div>
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" rows="5" ></textarea>
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="consent" name="consent" >
+                <label for="consent">I consent to being contacted by the team *</label>
+                <span class="error-message"></span>
+            </div>
+            <button type="submit">Submit</button>
+            <div class="success-message" id="success-message">Form submitted successfully!</div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('contact-form');
+            const notification = document.getElementById('notification');
+            
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent default form submission
+                
+                // Validation logic
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const queryType = document.querySelector('input[name="queryType"]:checked');
+                const message = document.getElementById('message').value.trim();
+                const consent = document.getElementById('consent').checked;
+                
+                // Validate each field
+                let isValid = true;
+                
+                if (firstName === "") {
+                    document.querySelector('#firstName + .error-message').textContent = "This Field is required .";
+                    document.querySelector('#firstName + .error-message').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.querySelector('#firstName + .error-message').style.display = 'none';
+                }
+                
+                if (lastName === "") {
+                    document.querySelector('#lastName + .error-message').textContent = "This Field is required .";
+                    document.querySelector('#lastName + .error-message').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.querySelector('#lastName + .error-message').style.display = 'none';
+                }
+                
+                if (email === "" || !isValidEmail(email)) {
+                    document.querySelector('#email + .error-message').textContent = "Please enter a valid email address.";
+                    document.querySelector('#email + .error-message').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.querySelector('#email + .error-message').style.display = 'none';
+                }
+                
+                if (!queryType) {
+                    document.querySelector('.radio-group + .error-message').textContent = "Please select a query type.";
+                    document.querySelector('.radio-group + .error-message').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.querySelector('.radio-group + .error-message').style.display = 'none';
+                }
+                
+                if (message === "") {
+                    document.querySelector('#message + .error-message').textContent = "Message is .";
+                    document.querySelector('#message + .error-message').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.querySelector('#message + .error-message').style.display = 'none';
+                }
+                
+                if (!consent) {
+                    document.querySelector('.checkbox-group + .error-message').textContent = "Please consent to being contacted.";
+                    document.querySelector('.checkbox-group + .error-message').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.querySelector('.checkbox-group + .error-message');
+                }
+                
+                // If valid, submit the form 
+                if (isValid) {
+                    // Display notification message and reset the form
+                    notification.classList.add('visible');
+                    form.reset();
+                    
+                    // Optionally, hide the notification message after a few seconds
+                    setTimeout(() => {
+                        notification.classList.remove('visible');
+                    }, 5000);
+                }
+            });
+            
+            // Simple email validation (you might want to use a more robust regex)
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+        });
+    </script>
+</
